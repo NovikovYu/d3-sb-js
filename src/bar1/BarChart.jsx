@@ -1,3 +1,4 @@
+export { useInterval, useState } from 'react';
 
 export default function BarChart() {
     // Declare the chart dimensions and margins.
@@ -53,11 +54,32 @@ export default function BarChart() {
     //         .attr("fill", "currentColor")
     //         .attr("text-anchor", "start")
     //         .text("↑ Frequency (%)"));
+    const generateDataset = () => (
+        Array(10).fill(0).map(() => ([
+            Math.random() * 80 + 10,
+            Math.random() * 35 + 10,
+        ]))
+    )
+
+    const [dataset, setDataset] = useState(
+        generateDataset()
+    )
+    useInterval(() => {
+        const newDataset = generateDataset()
+        setDataset(newDataset)
+    }, 2000)
 
     return (
-        <div style={{border: '3px solid orange'}}>
-            <svg width={width} height={height} fill={'red'}>
-
+        <div style={{ border: '3px solid orange' }}>
+            <svg viewBox="0 0 100 50">
+                {dataset.map(([x, y], i) => (
+                    <circle
+                        cx={x}
+                        cy={y}
+                        r="5"
+                        fill="red"
+                    />
+                ))}
             </svg>
         </div>
     );
